@@ -22,14 +22,14 @@ public class AppUserController {
     PasswordEncoder bCryptPasswordEncoder;
 
 
-    @PostMapping("/users")
-    public RedirectView createUser(String username, String password) {
-        AppUser newUser = new AppUser(username, bCryptPasswordEncoder.encode(password));
-        appUserRepository.save(newUser);
-        Authentication authentication = new UsernamePasswordAuthenticationToken(newUser, null, new ArrayList<>());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new RedirectView("/");
-    }
+//    @PostMapping("/login")
+//    public RedirectView createUser(String username, String password) {
+//        AppUser newUser = new AppUser(username, bCryptPasswordEncoder.encode(password));
+//        appUserRepository.save(newUser);
+//        Authentication authentication = new UsernamePasswordAuthenticationToken(newUser, null, new ArrayList<>());
+//        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        return new RedirectView("/");
+//    }
 
     @GetMapping("/login")
     public String getLoginPage() {
@@ -37,10 +37,15 @@ public class AppUserController {
     }
 
     @GetMapping("/signup")
-    public RedirectView addGreeting(@RequestParam String title, @RequestParam String artist, @RequestParam int songCount, @RequestParam int length, @RequestParam String imageUrl) {
-        AppUser album = new AppUser(title, artist, songCount, length, imageUrl);
-        appUserRepository.save(album);
-        return new RedirectView("/albums");
+    public String getSignup() {return "appuserform";}
+
+    @PostMapping("/signup")
+    public RedirectView addUser(@RequestParam String username, @RequestParam String password, @RequestParam String firstName, @RequestParam String lastName, @RequestParam String dateOfBirth, @RequestParam String bio) {
+        AppUser user = new AppUser(username, bCryptPasswordEncoder.encode(password), firstName, lastName, dateOfBirth, bio);
+        appUserRepository.save(user);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return new RedirectView("/");
     }
 
 }
