@@ -6,11 +6,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.security.Principal;
 import java.util.ArrayList;
 
 @Controller
@@ -46,6 +49,19 @@ public class AppUserController {
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new RedirectView("/");
+    }
+
+    @GetMapping("/users/{id}")
+    public String showUser(@PathVariable long id, Model m, Principal p) {
+        AppUser user = appUserRepository.findById(id).get();
+        if (user.getUsername().equals(p.getName())) {
+            m.addAttribute("user", user);
+            return "myProfile";
+        } else {
+            throw new PostUserNotMatchedException("That post does not belong to you.");
+        }
+
+
     }
 
 }
