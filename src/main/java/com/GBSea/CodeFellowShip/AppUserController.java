@@ -48,20 +48,21 @@ public class AppUserController {
         appUserRepository.save(user);
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new RedirectView("/");
+        return new RedirectView("/myprofile");
     }
 
     @GetMapping("/users/{id}")
     public String showUser(@PathVariable long id, Model m, Principal p) {
         AppUser user = appUserRepository.findById(id).get();
-        if (user.getUsername().equals(p.getName())) {
-            m.addAttribute("user", user);
-            return "myProfile";
-        } else {
-            throw new PostUserNotMatchedException("That post does not belong to you.");
-        }
-
-
+        m.addAttribute("user", user);
+        return "user";
     }
 
+    @GetMapping("/myprofile")
+    public String getMyProfile(Principal p, Model m) {
+        AppUser user = appUserRepository.findByUsername(p.getName());
+        m.addAttribute("principal", p);
+        m.addAttribute("user", user);
+        return "myProfile";
+    }
 }
