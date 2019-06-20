@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -26,6 +27,11 @@ public class AppUser implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     List<Post> posts;
+
+    @ManyToMany
+    Set<AppUser> friends;
+    @ManyToMany
+    Set<AppUser> followers;
 
     public AppUser() {}
 
@@ -123,5 +129,25 @@ public class AppUser implements UserDetails {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public Set<AppUser> getFriends() {
+        return friends;
+    }
+
+    public void setFriends(Set<AppUser> friends) {
+        this.friends = friends;
+    }
+
+    public Set<AppUser> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(Set<AppUser> followers) {
+        this.followers = followers;
     }
 }

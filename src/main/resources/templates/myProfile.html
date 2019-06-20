@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:replace="fragments/header :: header">...</div>
+
+<h2>My Profile</h2>
+<img src="../profile.png">
+<p>Username: <span th:text="${user.username}"></span></p>
+<p>Name: <span th:text="${user.firstName}"></span> <span th:text="${user.lastName}"></span></p>
+<p>Birthday: <span th:text="${user.dateOfBirth}"></span></p>
+<p>Bio: <span th:text="${user.bio}"></span></p>
+
+
+</body>
+</html>

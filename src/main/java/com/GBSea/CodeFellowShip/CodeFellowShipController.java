@@ -33,19 +33,29 @@ public class CodeFellowShipController {
     }
 
     @GetMapping("/post/create")
-    public String getPostCreation() {
+    public String getPostCreation(Principal p, Model m) {
+        m.addAttribute("principal", p);
+
         return "createPost";
     }
 
+    @GetMapping("/feed")
+    public String getFeed(Principal p, Model m) {
+        m.addAttribute("principal", p);
+
+        return "feed";
+    }
+
+
     @PostMapping("/post")
     public RedirectView createPost(String subject, String body, Principal p) {
-        Post newDino = new Post();
-        newDino.subject = subject;
-        newDino.body = body;
-        newDino.createdOn = new Date();
+        Post post = new Post();
+        post.subject = subject;
+        post.body = body;
+        post.createdOn = new Date();
         AppUser me = appUserRepository.findByUsername(p.getName());
-        newDino.user = me;
-        postRepository.save(newDino);
+        post.user = me;
+        postRepository.save(post);
         return new RedirectView("/");
     }
 
